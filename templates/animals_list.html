@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Animal List</title>
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'animal-create' %}">Create new animal</a>
+    {% for animal in animal_list %}
+        <p>{{ animal }}</p>
+    {% endfor %}
+{% endblock %}

@@ -59,7 +59,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,4 +137,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Default Auth user model
 
 AUTH_USER_MODEL = 'core.User'
-
