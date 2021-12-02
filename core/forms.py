@@ -1,6 +1,6 @@
 from django import forms
 
-from core.models import Animal
+from core.models import Animal, AnimalImage
 
 
 class AnimalForm(forms.ModelForm):
@@ -12,3 +12,15 @@ class AnimalForm(forms.ModelForm):
             "kind",
             "owner",
         ]
+
+
+class AnimalImageForm(forms.ModelForm):
+    class Meta:
+        model = AnimalImage
+        fields = [
+            "url",
+            "kind",
+            "user",
+            "file_type",
+        ]
+

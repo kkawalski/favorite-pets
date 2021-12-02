@@ -1,3 +1,5 @@
+import requests
+
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
@@ -47,6 +49,67 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.email
+
+
+class AnimalImage(models.Model):
+    CATS_URL = 'https://dog.ceo/api/breeds/image/random'
+    DOGS_URL = 'https://dog.ceo/api/breeds/image/random'
+
+    KIND_DOG = 'cat'
+    KIND_CAT = 'dog'
+    KIND_CHOICES = (
+        (KIND_DOG, 'Dog'),
+        (KIND_CAT, 'Cat'),
+    )
+
+    ALLOWED_FILE_TYPES = ('png', 'gif', 'jpg', 'jpeg')
+    FILE_TYPE_CHOICES = [(value, value.upper()) for value in ALLOWED_FILE_TYPES]
+
+    url = models.TextField()
+    kind = models.CharField(max_length=3, choices=KIND_CHOICES)
+    file_type = models.CharField(max_length=4, choices=FILE_TYPE_CHOICES)
+    user = models.ForeignKey(
+        'core.User',
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+
+    @classmethod
+    def get_animal_url(cls, kind):
+        ANIMAL_URLS = {
+            'cat': {'url': cls.CATS_URL, 'key': 'file'},
+            'dog': {'url': cls.DOGS_URL, 'key': 'message'},
+        }
+        kind_api = ANIMAL_URLS.get(kind.lower())
+        data = requests.get(kind_api['url']).json() or {}
+        print(data)
+        print(kind)
+        url = data.get(kind_api['key'], '')
+        print(url)
+        file_type = url.split('.')[-1]
+        print('URL', url)
+        print(file_type)
+        return url, file_type
+
+    @classmethod
+    def get_cat_image(cls, user):
+        url, file_type = cls.get_animal_url('cat')
+        return cls(url=url, file_type=file_type, user=user, kind='cat')
+    
+    @classmethod
+    def get_dog_image(cls, user):
+        url, file_type = cls.get_animal_url('dog')
+        return cls(url=url, file_type=file_type, user=user, kind='dog')
+
+    @classmethod
+    def get_image(cls, kind, user):
+        if kind.lower() == 'cat':
+            return cls.get_cat_image(user)
+        if kind.lower() == 'dog':
+            return cls.get_dog_image(user)
+
+    def __str__(self) -> str:
+        return self.url.split('/')[-1]
 
 
 class Animal(models.Model):
