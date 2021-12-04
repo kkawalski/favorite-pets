@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from core.models import Animal, AnimalImage, User
+
+
+admin.site.register(Animal)
+admin.site.register(AnimalImage)
+admin.site.register(User)

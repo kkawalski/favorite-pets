@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>HOME</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container mw-100 m-0">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col dogs d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center">
+                    <!-- <form method="POST" action="{% url 'get-animal' %}?type=dog"> -->
+                        <a class="btn btn-dark btn-lg" href="{% url 'get-animal' %}?type=dog" role="button">I love dogs!</a>
+                        <!-- <a type="submit" class="btn btn-dark btn-lg">I love dogs!</button> -->
+                    <!-- </form> -->
+                </div>
+            </div>
+            <div class="col cats d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center">
+                    <form method="POST" action="{% url 'get-animal' %}?type=cat">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-dark btn-lg">I love cats!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
